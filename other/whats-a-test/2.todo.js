@@ -17,16 +17,16 @@ Then run this code with `node 2.todo`
 
 const {sum, subtract} = require('./math')
 
-let result, expected
-
-result = sum(3, 7)
-expected = 10
-if (result !== expected) {
-  throw new Error(`${result} is not equal to ${expected}`)
-}
-
-result = subtract(7, 3)
-expected = 4
-if (result !== expected) {
-  throw new Error(`${result} is not equal to ${expected}`)
-}
+const expect = actual => {
+    // problem is error will always be thrown from line 34
+    // now you can look at the stack trace to see where the expect
+    // function was called, but that's suboptimal
+    return {toBe(expected) {
+        if (actual !== expected)
+            throw new Error(`Failed test case: returned value of ${actual} !== expected value of ${expected}`);
+    }
+} };
+// since the first test fails, the second test doesn't start
+// we have no indication the second function is also failing
+expect(sum(3,7)).toBe(10);
+expect(subtract(7,3)).toBe(4);
