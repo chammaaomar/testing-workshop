@@ -1,6 +1,9 @@
 // monkey-patching
 import thumbWar from '../thumb-war'
 // import the utils module (see hint #1 at the bottom of the file)
+// for some reason, if you import {getWinner}, it gives
+// a reference error whenever you access it in the callback
+// so have to use utils.getWinner... strange
 import * as utils from '../utils'
 test('returns winner', () => {
   // keep track of the original `getWinner` utility function (see hint #2)
