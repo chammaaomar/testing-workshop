@@ -1,20 +1,22 @@
 import {isPasswordAllowed} from '../auth'
 import {userToJSON} from '../auth'
 
-test('isPasswordAllowed only allows some passwords', () => {
-  // here's where I'll demo things for you :)
-  // the more your tests resemble the way your
-  // software is used, the more confidence these
-  // tests can give you
-  // can use assertions to ensure tests are running
-  // but have to manually increment
-  expect.assertions(4); 
-  expect(isPasswordAllowed('')).toBe(false);
-  expect(isPasswordAllowed('ffffffffff')).toBe(false);
-  expect(isPasswordAllowed('8888888888')).toBe(false);
-  expect(isPasswordAllowed(';jgsl;jsg12')).toBe(true);
-  // important: verify your tests can fail!
-  // and it is testing the component you think it is
+describe('isPasswordAllowed', () => {
+    const allowedPasswords = [';jgsl;jsg12'];
+    const disallowedPasswords = ['8888888888','ffffffffff', ''];
+    // in generated tests, title should contain information
+    // about the specific data
+    allowedPasswords.forEach(pwd => {
+        it(`"${pwd}" should be allowed`, () => {
+            expect(isPasswordAllowed(pwd)).toBe(true);
+        })
+    })
+
+    disallowedPasswords.forEach(pwd => {
+        it(`"${pwd}" should be disallowed`, () => {
+            expect(isPasswordAllowed(pwd)).toBe(false);
+        })
+    })
 })
 
 test('userToJSON excludes secure properties', () => {
@@ -23,20 +25,22 @@ test('userToJSON excludes secure properties', () => {
   // and then assert that the test user object
   // doesn't have any of the properties it's not
   // supposed to.
-  const date = new Date();
+  const date = new Date()
   let sensitive_data = {
     exp: date,
     iat: date,
     hash: '8743b52063cd84097a65d1633f5c74f5',
-    salt: '88fcd28'
+    salt: '88fcd28',
   }
   let test_usr = {
     id: 67381,
     username: 'sarah-connor',
-    ...sensitive_data
+    ...sensitive_data,
   }
   // expect.not.objectContaining seems broken...
-  expect(userToJSON(test_usr)).not.toEqual(expect.objectContaining(sensitive_data));
+  expect(userToJSON(test_usr)).not.toEqual(
+    expect.objectContaining(sensitive_data),
+  )
 })
 
 //////// Elaboration & Feedback /////////
